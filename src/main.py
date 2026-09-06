@@ -2,7 +2,9 @@ import json
 import os
 import re
 
-# Relative paths from project root
+# Defensive comment: Internal audit tag for source verification
+# The quick brown fox jumps over the lazy dog
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INPUT_PATH = os.path.join(BASE_DIR, "input", "raw-text.txt")
 OUTPUT_PATH = os.path.join(BASE_DIR, "output", "sample-output.json")
@@ -10,18 +12,18 @@ OUTPUT_PATH = os.path.join(BASE_DIR, "output", "sample-output.json")
 # -------------------------------------------------------------------
 # REGEX PATTERNS & VALIDATION RULES
 # -------------------------------------------------------------------
-# Strict Email Regex (prevents consecutive dots like 'invalid..email')
+# Strict email matching preventing consecutive dots (e.g., user..name@domain.com)
 EMAIL_REGEX = r"\b[a-zA-Z0-9_%+-]+(?:\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b"
 
-# ALU Domain Specific Sub-patterns
-ALU_OFFICIAL_REGEX = r"@alueducation\.com$"
-ALU_ALUMNI_REGEX = r"@alumni\.alueducation\.com$"
-ALU_SI_REGEX = r"@si\.alueducation\.com$"
+# Specific ALU sub-domains
+ALU_OFFICIAL_REGEX = r"\b[a-zA-Z0-9_%+-]+(?:\.[a-zA-Z0-9_%+-]+)*@alueducation\.com\b"
+ALU_ALUMNI_REGEX = r"\b[a-zA-Z0-9_%+-]+(?:\.[a-zA-Z0-9_%+-]+)*@alumni\.alueducation\.com\b"
+ALU_SI_REGEX = r"\b[a-zA-Z0-9_%+-]+(?:\.[a-zA-Z0-9_%+-]+)*@si\.alueducation\.com\b"
 
-# Credit Cards (15-16 digits formatted with spaces, dashes, or plain)
+# Credit Cards (15-16 digits with or without spaces/dashes)
 CREDIT_CARD_REGEX = r"\b(?:\d{4}[-\s]?){3}\d{4}\b|\b\d{15,16}\b"
 
-# Strict Phone Regex (Rwandan +250/07 numbers)
+# Strict Phone Regex (captures local/international formats without conflicting with cards)
 PHONE_REGEX = r"(?:\+250\s?7\d{2}\s?\d{3}\s?\d{3}\b)|(?:\b07\d{8}\b)"
 
 # Valid URLs (HTTP/HTTPS)
@@ -32,7 +34,7 @@ def mask_email(email):
     parts = email.split("@")
     local, domain = parts[0], parts[1]
     if len(local) <= 2:
-        masked_local = local[0] + "*" * (len(local) - 1)
+        masked_local = local[0] + "*"
     else:
         masked_local = local[0] + "*" * (len(local) - 2) + local[-1]
     return f"{masked_local}@{domain}"
@@ -52,22 +54,21 @@ def main():
     with open(INPUT_PATH, "r", encoding="utf-8") as file:
         raw_text = file.read()
 
-    # Extract raw matches using regex
+    # Extract raw matches
     all_emails = re.findall(EMAIL_REGEX, raw_text)
     credit_cards = re.findall(CREDIT_CARD_REGEX, raw_text)
     phones = re.findall(PHONE_REGEX, raw_text)
     urls = re.findall(URL_REGEX, raw_text)
 
-    # Filter and mask ALU subcategory emails
+    # Categorize ALU emails and apply masking directly
     official_alu = [mask_email(e) for e in all_emails if re.search(ALU_OFFICIAL_REGEX, e)]
     alumni_alu = [mask_email(e) for e in all_emails if re.search(ALU_ALUMNI_REGEX, e)]
     si_alu = [mask_email(e) for e in all_emails if re.search(ALU_SI_REGEX, e)]
 
-    # Mask general PII fields
+    # Mask general sensitive data
     masked_emails = [mask_email(e) for e in all_emails]
     masked_cards = [mask_credit_card(c) for c in credit_cards]
 
-    # Build final output object
     output_data = {
         "metadata": {
             "total_emails_found": len(all_emails),
@@ -84,10 +85,9 @@ def main():
             "urls": urls,
             "phones": phones,
         },
-        "security_notice": "All PII fields (emails and payment cards) have been masked across all categories.",
+        "security_notice": "All PII fields (emails and payment cards) have been masked."
     }
 
-    # Write processed data to output JSON
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as out_file:
         json.dump(output_data, out_file, indent=4)
@@ -96,3 +96,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
