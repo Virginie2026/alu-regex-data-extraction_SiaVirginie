@@ -11,17 +11,17 @@
             "r******y@alumni.alueducation.com",
             "t********p@si.alueducation.com",
             "j********3@gmail.com",
-            "i************l@alueducation.com"
+            "e***l@alueducation.com"
         ],
         "alu_official_emails": [
-            "support@alueducation.com",
-            "invalid..email@alueducation.com"
+            "s*****t@alueducation.com",
+            "e***l@alueducation.com"
         ],
         "alu_alumni_emails": [
-            "registry@alumni.alueducation.com"
+            "r******y@alumni.alueducation.com"
         ],
         "alu_si_emails": [
-            "tutor.help@si.alueducation.com"
+            "t********p@si.alueducation.com"
         ],
         "masked_credit_cards": [
             "************8472",
@@ -36,5 +36,5 @@
             "0788990011"
         ]
     },
-    "security_notice": "All PII fields (emails and payment cards) have been masked."
+    "security_notice": "All PII fields (emails and payment cards) have been masked across all categories."
 }
