@@ -1,0 +1,20 @@
+ALU System Operations & Audit Log - Kigali Campus
+
+System Contacts & Email Records:
+- Official Admin: support@alueducation.com
+- Alumni Relations: registry@alumni.alueducation.com
+- Academic SI Lead: tutor.help@si.alueducation.com
+- External/Personal: john.doe23@gmail.com, invalid..email@alueducation.com
+- Security Alert / Malformed: <script>alert('xss')</script>@domain.com
+
+Web Portals & Links:
+- Student Portal: https://portal.alueducation.com/dashboard?ref=login
+- Library Server: http://192.168.1.105:8080/resources
+
+Financial Transactions & Payment Cards:
+- Tuition Installment 1: 4532 7182 9301 8472 (Approved)
+- Library Fine Payment: 5412-3389-0123-4567
+
+Emergency Contact Hotlines:
+- Kigali Desk: +250 788 123 456
+- Office Line: 0788990011

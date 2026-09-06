@@ -1,0 +1,40 @@
+{
+    "metadata": {
+        "total_emails_found": 5,
+        "total_credit_cards_found": 2,
+        "total_phones_found": 2,
+        "total_urls_found": 2
+    },
+    "extracted_data": {
+        "masked_emails": [
+            "s*****t@alueducation.com",
+            "r******y@alumni.alueducation.com",
+            "t********p@si.alueducation.com",
+            "j********3@gmail.com",
+            "i************l@alueducation.com"
+        ],
+        "alu_official_emails": [
+            "support@alueducation.com",
+            "invalid..email@alueducation.com"
+        ],
+        "alu_alumni_emails": [
+            "registry@alumni.alueducation.com"
+        ],
+        "alu_si_emails": [
+            "tutor.help@si.alueducation.com"
+        ],
+        "masked_credit_cards": [
+            "************8472",
+            "************4567"
+        ],
+        "urls": [
+            "https://portal.alueducation.com/dashboard?ref=login",
+            "http://192.168.1.105:8080/resources"
+        ],
+        "phones": [
+            "+250 788 123 456",
+            "0788990011"
+        ]
+    },
+    "security_notice": "All PII fields (emails and payment cards) have been masked."
+}
