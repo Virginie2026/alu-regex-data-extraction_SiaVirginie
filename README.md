@@ -1,32 +1,49 @@
-# ALU Regex Data Extraction and PII Sanitization
+# ALU Regex Data Extraction & Secure Validation
 
-This project automatically extracts, categorizes, and masks sensitive personal data (emails, credit cards, URLs, and phone numbers) from raw text input files.
+This is a Python project I built for an assignment at African Leadership University. It uses regular expressions to parse messy text, extract structured information (like emails, phone numbers, and credit cards), and mask sensitive PII data before saving it.
 
----
+## Folder structure
 
-## How It Works
+alu-regex-data-extraction_SiaVirginie/
+├── input/
+│   └── raw-text.txt        # sample text to test the program on
+├── src/
+│   └── main.py              # extraction and validation logic
+├── output/
+│   └── sample-output.json   # generated report
+└── README.md
 
-### 1. Data Extraction Rules
-* **Emails:** Matches standard email address structures (`user@domain.com`).
-* **Credit Cards:** Matches 15 and 16-digit card numbers with or without space/dash delimiters.
-* **URLs:** Identifies valid `http://` and `https://` web addresses.
-* **Phone Numbers:** Extracts Rwandan (`+250...` / `07...`) and international formats without conflicting with credit card matches.
+## How to run it
 
-### 2. ALU Domain Sorting
-Extracted emails are grouped into specific categories based on domain suffix:
-* **Official:** `@alueducation.com`
-* **Alumni:** `@alumni.alueducation.com`
-* **Peer Tutors / SI:** `@si.alueducation.com`
+No external libraries are required. It runs on standard Python 3.8+.
 
-### 3. Security & PII Protection
-Sensitive fields are masked prior to writing the output JSON file:
-* **Credit Cards:** Replaced with asterisks, keeping only the final 4 digits visible (e.g., `************8472`).
-* **Emails:** Local username parts are anonymized (e.g., `s*****t@alueducation.com`).
+cd alu-regex-data-extraction_SiaVirginie
+python3 src/main.py
 
----
+The script reads input/raw-text.txt, runs the extraction logic, prints a quick summary in the terminal, and exports the final JSON to output/sample-output.json.
 
-## How to Run the Project
+## What it extracts
 
-1. **Navigate to the project directory:**
-   ```bash
-   cd alu-regex-data-extraction_SiaVirginie
+- Emails: Validates address formats and groups them into ALU categories (alu_official, alu_alumni, alu_si).
+- Credit cards: Matches card patterns and verifies them with a Luhn checksum. Invalid numbers are separated into a rejected list.
+- URLs: Catches both http/https links and basic www links.
+- Phone numbers: Extracts Rwandan local and international formats (+250 / 07).
+- Times: Handles both 24-hour (14:45) and 12-hour (2:30 PM) formats.
+- Hashtags: Finds standard hashtags while ignoring empty symbols like ##.
+
+## How the logic works
+
+- Email filtering: Rejects bad formats like missing @ or double dots (domain..com).
+- Card verification: Checking the digit pattern isn't enough, so I added a Luhn algorithm check to confirm if card numbers are mathematically valid.
+- Phone matching: Avoids confusing credit card digit groups with phone numbers.
+- Time constraints: Bounded range rules ensure values like 23:61 get ignored.
+
+## Security & Privacy
+
+- Basic attack detection: Flags lines containing common attack payloads (like <script> tags or SQL comments) before processing.
+- Data masking: Masks email user parts and credit card numbers (e.g. s*****e@alueducation.com and ************4242) so sensitive details are never saved in plain text.
+
+## Test data
+
+The file input/raw-text.txt contains realistic support ticket samples with mixed email formats, valid and invalid credit cards, phone numbers, and a few edge cases to test how the script handles bad inputs.
+
